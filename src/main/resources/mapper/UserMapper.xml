@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcskj.lbc.mapper.UserMapper">
+    <insert id="userSignUp">
+        insert IGNORE into user (nick_name,password,mail,user_detail_id) values(#{nickName},#{password},#{mail},#{userDetailId})
+    </insert>
+    <select id="getUserList">
+        select * from user
+        <where>
+            <if test="mail!='' and mail!=null">
+                and mail like CONCAT("%",#{mail},"%")
+            </if>
+        <if test="realName!='' and realName!=null">
+            and real_name like CONCAT("%",#{realName},"%")
+        </if>
+        and mail!='admin'
+        </where>
+    </select>
+</mapper>

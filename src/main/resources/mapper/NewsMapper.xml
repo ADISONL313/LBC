@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcskj.lbc.mapper.NewsMapper">
+    <select id="adminGetNewsMapper">
+        select * from news
+        <where>
+        <if test="selKey!='' and selKey!=null">
+        and new_title like CONCAT("%",#{selKey},"%") or reporter like CONCAT("%",#{selKey},"%")
+        </if>
+        <if test="newTime!='' and newTime!=null">
+            and new_time like CONCAT("%",#{newTime},"%")
+        </if>
+                 <if test="mail!='' and mail!=null and mail!='admin'">
+                     and mail=#{mail}
+                 </if>
+        </where>
+        order by new_time desc
+    </select>
+    <select id="userGetNewsMapper">
+        select * from news
+        <where>
+        and process=1
+            <if test="selKey!='' and selKey!=null">
+                and new_title like CONCAT("%",#{selKey},"%") or reporter like CONCAT("%",#{selKey},"%")
+            </if>
+            <if test="newTime!='' and newTime!=null">
+                and new_time like CONCAT("%",#{newTime},"%")
+            </if>
+                 <if test="newId!='' and newId!=null">
+                     and new_id=#{newId}
+                 </if>
+        </where>
+        order by new_time desc
+    </select>
+</mapper>

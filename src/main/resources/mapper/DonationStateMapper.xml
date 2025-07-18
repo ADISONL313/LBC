@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcskj.lbc.mapper.DonationStateMapper">
+    <delete id="deleteDonationStateByDonationIdMapper">
+        delete from donation_state
+        <where>
+            and donation_id=#{donationId}
+        </where>
+    </delete>
+    <update id="updateLogisticsStateMapper" parameterType="com.cqcskj.lbc.entity.DonationState" >
+        update donation_state set logistics_state=#{logisticsState},logistics_time=#{logisticsTime}
+        ,logistics_img=#{logisticsImg},logistics_text=#{logisticsText}
+        <where>
+            and state_id=#{stateId}
+        </where>
+    </update>
+    <update id="delStateImgMapper">
+        update donation_state
+        <set>
+            <!-- 根据 whatImg 的值动态更新相应的图片字段 -->
+            <if test="whatImg == 'logistics'">
+                logistics_img = ''
+            </if>
+            <if test="whatImg == 'transport'">
+                transport_img = ''
+            </if>
+            <if test="whatImg == 'arrival'">
+                arrival_img = ''
+            </if>
+            <if test="whatImg == 'distribute'">
+                distribute_img = ''
+            </if>
+        </set>
+        <where>
+            state_id = #{stateId}
+        </where>
+    </update>
+    <update id="updateTransportStateMapper" parameterType="com.cqcskj.lbc.entity.DonationState" >
+        update donation_state set transport_state=#{transportState},transport_time=#{transportTime}
+        ,transport_img=#{transportImg},transport_text=#{transportText},transport_address=#{transportAddress}
+        <where>
+            and state_id=#{stateId}
+        </where>
+    </update>
+    <update id="updateArrivalStateMapper" parameterType="com.cqcskj.lbc.entity.DonationState" >
+        update donation_state set arrival_state=#{arrivalState},arrival_time=#{arrivalTime}
+        ,arrival_img=#{arrivalImg},arrival_text=#{arrivalText}
+        <where>
+            and state_id=#{stateId}
+        </where>
+    </update>
+    <update id="updateDistributeStateMapper" parameterType="com.cqcskj.lbc.entity.DonationState" >
+        update donation_state set distribute_state=#{distributeState},distribute_time=#{distributeTime}
+        ,distribute_img=#{distributeImg},distribute_text=#{distributeText}
+        <where>
+            and state_id=#{stateId}
+        </where>
+    </update>
+</mapper>

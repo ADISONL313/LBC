@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcskj.lbc.mapper.DonationMapper">
+    <select id="getDonationItemMapper">
+        select * from donation
+        <where>
+            <if test="mail!=null and mail!=''">
+                and mail like CONCAT("%",#{mail},"%")
+            </if>
+        <if test="itemType!=null and itemType!=''">
+            and item_type=#{itemType}
+        </if>
+        </where>
+    </select>
+    <select id="donationStatisticsMapper" resultType="java.util.Map">
+        SELECT
+            item_type as itemType,
+            COUNT(*) AS recordCount
+        FROM
+            donation
+        WHERE
+            audit_status = 1 and mail = #{mail}
+        GROUP BY
+            item_type
+    </select>
+</mapper>

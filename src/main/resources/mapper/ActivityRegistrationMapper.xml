@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcskj.lbc.mapper.ActivityRegistrationMapper">
+    <resultMap id="ActivityRegistrationResultMap" type="java.util.Map">
+        <result property="mail" column="mail"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="realName" column="real_name"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="gender" column="gender"/>
+        <result property="idCard" column="id_card"/>
+        <result property="contactAddress" column="contact_address"/>
+        <result property="activityId" column="activity_id"/>
+        <result property="activityName" column="activity_name"/>
+        <result property="activityStartTime" column="activity_start_time"/>
+        <result property="activityEndTime" column="activity_end_time"/>
+        <result property="activityContent" column="activity_content"/>
+        <result property="address" column="address"/>
+        <result property="participantsNumber" column="participants_number"/>
+        <result property="activityImg" column="activity_img"/>
+        <result property="registrationId" column="registration_id"/>
+        <result property="registrationStatus" column="registration_status"/>
+        <result property="registrationRejectionReason" column="registration_rejection_reason"/>
+        <result property="userRejectionReason" column="user_rejection_reason"/>
+    </resultMap>
+    <select id="getUserActivityRegistrationMapper" resultMap="ActivityRegistrationResultMap">
+        SELECT
+            u.mail,
+            u.nick_name,
+            u.real_name,
+            u.phone_number,
+            u.gender,
+            u.user_role as userRole,
+            u.donation_permission as donationPermission,
+            u.report_permission as reportPermission,
+            u.id_card,
+            u.contact_address,
+            a.activity_id,
+            a.activity_name,
+            a.activity_start_time,
+            a.activity_end_time,
+            a.activity_content,
+            a.address,
+            a.participants_number,
+            a.activity_img,
+            ar.registration_id,
+            ar.registration_status,
+            ar.rejection_reason AS registration_rejection_reason,
+            u.rejection_reason AS user_rejection_reason
+        FROM
+            user u
+                JOIN
+            activity_registration ar ON u.mail = ar.mail
+                JOIN
+            activity a ON ar.activity_id = a.activity_id
+        <where>
+            <if test="mail!='' and mail!=null">
+                and u.mail=#{mail}
+            </if>
+        <if test="activityStartTime!='' and activityStartTime!=null">
+            and a.activity_start_time like CONCAT("%",#{activityStartTime},"%")
+        </if>
+            <if test="activityEndTime!='' and activityEndTime!=null">
+                and a.activity_end_time like CONCAT("%",#{activityEndTime},"%")
+            </if>
+        <if test="activityName!='' and activityName!=null">
+            and a.activity_name like CONCAT("%",#{activityName},"%")
+        </if>
+        <if test="activityId!='' and activityId!=null">
+            and a.activity_id like  CONCAT("%",#{activityId},"%")
+        </if>
+        </where>
+    </select>
+    <update id="rejectionArMapper" parameterType="com.cqcskj.lbc.entity.ActivityRegistration">
+        UPDATE activity_registration
+        SET rejection_reason = #{rejectionReason},registration_status=#{registrationStatus}
+        WHERE mail = #{mail} AND activity_id = #{activityId}
+    </update>
+    <update id="passUserArMapper" parameterType="com.cqcskj.lbc.entity.ActivityRegistration">
+        UPDATE activity_registration
+        SET rejection_reason = '',registration_status=1
+        WHERE mail = #{mail} AND activity_id = #{activityId}
+    </update>
+</mapper>

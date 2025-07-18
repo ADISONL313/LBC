@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcskj.lbc.mapper.VolunteerHelpMapper">
+    <resultMap id="assignVolunteerResultMap" type="java.util.Map">
+        <!-- user 表字段 -->
+        <result property="mail" column="mail"/>
+        <result property="realName" column="real_name"/>
+        <result property="gender" column="gender"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <!-- volunteer 表字段 -->
+        <result property="volunteerId" column="volunteer_id"/>
+        <result property="volunteerHelpId" column="volunteer_help_id"/>
+        <result property="userRole" column="user_role"/> <!-- 添加 userRole 的映射 -->
+        <result property="volunteerHelpState" column="volunteer_help_state"/>
+    </resultMap>
+
+    <select id="getAssignVolunteerMapper" resultMap="assignVolunteerResultMap">
+        SELECT
+            u.mail,
+            u.real_name,
+            u.gender,
+            v.volunteer_id,
+            v.volunteer_help_id,
+            v.volunteer_help_state,
+            u.user_role,
+            u.phone_number
+        FROM
+            user u
+                JOIN
+            volunteer_help v ON u.mail = v.mail
+        WHERE
+            v.help_id = #{help_id}
+    </select>
+    <resultMap id="HelpVoResultMap" type="java.util.Map">
+        <id property="helpId" column="help_id"/>
+        <result property="mail" column="mail"/>
+        <result property="helpTitle" column="help_title"/>
+        <result property="helpContent" column="help_content"/>
+        <result property="phone" column="phone"/>
+        <result property="emergencyPhone" column="emergency_phone"/>
+        <result property="helpStatus" column="help_status"/>
+        <result property="address" column="address"/>
+        <result property="helpTime" column="help_time"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="volunteerHelpId" column="volunteer_help_id"/>
+        <result property="volunteerId" column="volunteer_id"/>
+        <result property="volunteerHelpState" column="volunteer_help_state"/>
+    </resultMap>
+
+    <select id="getVolunteerNowTaskMapper" resultMap="HelpVoResultMap">
+        SELECT
+            h.help_id,
+            h.mail,
+            h.help_title,
+            h.help_content,
+            h.phone,
+            h.emergency_phone,
+            h.help_status,
+            h.address,
+            h.help_time,
+            h.release_time,
+            vh.volunteer_help_id,
+            vh.volunteer_id,
+            vh.volunteer_help_state
+        FROM
+            help h
+                JOIN
+            volunteer_help vh ON h.help_id = vh.help_id
+        WHERE
+            h.help_status = 1 and vh.mail=#{mail}
+    </select>
+
+    <select id="getHelpHistoryMapper" resultMap="HelpVoResultMap">
+        SELECT
+            h.help_id,
+            h.mail,
+            h.help_title,
+            h.help_content,
+            h.phone,
+            h.emergency_phone,
+            h.help_status,
+            h.address,
+            h.help_time,
+            h.release_time,
+            vh.volunteer_help_id,
+            vh.volunteer_id,
+            vh.volunteer_help_state
+        FROM
+            help h
+                JOIN
+            volunteer_help vh ON h.help_id = vh.help_id
+        WHERE
+             vh.mail=#{mail}
+    </select>
+</mapper>
