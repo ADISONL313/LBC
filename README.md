@@ -16,3 +16,4 @@
 3.npm包管理工具10.0及以上
 4.前端依赖安装npm install
 5.启动前端项目 npm run dev
+#后端在back分支，前端在master
